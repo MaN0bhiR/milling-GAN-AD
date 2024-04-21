@@ -11,7 +11,7 @@ import model
 from scipy.spatial.distance import pdist, squareform
 from scipy.stats import multivariate_normal, invgamma, mode
 from scipy.special import gamma
-from scipy.misc.pilutil import imresize
+#from scipy.misc.pilutil import imresize
 from functools import partial
 from math import ceil
 
@@ -357,7 +357,7 @@ def wadi_test(seq_length, seq_step, num_signals, randomize=False):
 def kdd99(seq_length, seq_step, num_signals):
     train = np.load('./data/X_train.npy')
     print('load X_train.npy from .npy')
-    m, n = train.shape  # m=562387, n=35
+    m, n , _ = train.shape  # m=562387, n=35
     # normalization
     # for i in range(n - 1):
     #     # print('i=', i)
@@ -411,7 +411,7 @@ def kdd99_test(seq_length, seq_step, num_signals):
     test = np.load('./data/X_val.npy')
     print('load X_val.npy from .npy')
 
-    m, n = test.shape  # m1=494021, n1=35
+    m, n , _ = test.shape  # m1=494021, n1=35
 
     # for i in range(n - 1):
     #     B = max(test[:, i])
