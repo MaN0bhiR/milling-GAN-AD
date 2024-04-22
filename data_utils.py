@@ -393,12 +393,12 @@ def kdd99(seq_length, seq_step, num_signals):
     ###########################################
     ###########################################x``
     #samples = train
-    num_samples = (samples.shape[0] - seq_length) // seq_step
+    num_samples = samples.shape[0]
     #aa = np.empty([num_samples, seq_length, num_signals])
     bb = np.empty([num_samples, seq_length, 1])
 
     for j in range(num_samples):
-        bb[j, :, :] = np.reshape(labels[(j * seq_step):(j * seq_step + seq_length)], [-1, 1])
+        bb[j, :, :] = labels[j]
         # for i in range(num_signals):
         #     aa[j, :, i] = samples[(j * seq_step):(j * seq_step + seq_length), i]
 
@@ -445,14 +445,14 @@ def kdd99_test(seq_length, seq_step, num_signals):
     # samples = T_a.reshape([samples.shape[0], ])
     ###########################################
     ###########################################
-    num_samples_t = (samples.shape[0] - seq_length) // seq_step
+    num_samples_t = samples.shape[0]
     #aa = np.empty([num_samples_t, seq_length, num_signals])
     bb = np.empty([num_samples_t, seq_length, 1])
     bbb = np.empty([num_samples_t, seq_length, 1])
 
     for j in range(num_samples_t):
-        bb[j, :, :] = np.reshape(labels[(j * seq_step):(j * seq_step + seq_length)], [-1, 1])
-        bbb[j, :, :] = np.reshape(idx[(j * seq_step):(j * seq_step + seq_length)], [-1, 1])
+        bb[j, :, :] = labels[j]
+        bbb[j, :, :] = idx[j]
         # for i in range(num_signals):
         #     aa[j, :, i] = samples[(j * seq_step):(j * seq_step + seq_length), i]
 
