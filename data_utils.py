@@ -456,7 +456,7 @@ def kdd99_test(seq_length, seq_step, num_signals):
         # for i in range(num_signals):
         #     aa[j, :, i] = samples[(j * seq_step):(j * seq_step + seq_length), i]
 
-    samples = aa
+    #samples = aa
     labels = bb
     index = bbb
 
