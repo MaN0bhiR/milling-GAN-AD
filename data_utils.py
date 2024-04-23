@@ -19,7 +19,19 @@ from sklearn.metrics.pairwise import rbf_kernel
 from sklearn.preprocessing import MinMaxScaler
 from sklearn import preprocessing
 
+def remove_classes(class_to_remove, y_val_slim, X_val_slim):
+        """Funciton to remove classes from train/val set"""
 
+        # start with y_valid_slim
+        index_to_delete = []
+        for i, class_digit in enumerate(y_val_slim):
+            if class_digit in class_to_remove:
+                index_to_delete.append(i)
+
+        y_val_slim = np.delete(y_val_slim, index_to_delete)
+        X_val_slim = np.delete(X_val_slim, index_to_delete, axis=0)
+
+        return X_val_slim, y_val_slim
 # --- deal with the SWaT data --- #
 def swat(seq_length, seq_step, num_signals, randomize=False):
     """ Load and serialise """
@@ -371,7 +383,8 @@ def kdd99(seq_length, seq_step, num_signals):
     #         train[:, i] = train[:, i]
 
     samples = train
-    labels = np.load('./data/y_train.npy')  # the last colummn is label
+    labels = np.load('./data/y_train.npy')
+    samples , labels = remove_classes([1,2], labels, samples)  # the last colummn is label
     #############################
     ############################
     # -- apply PCA dimension reduction for multi-variate GAN-AD -- #
@@ -458,6 +471,7 @@ def kdd99_test(seq_length, seq_step, num_signals):
 
     #samples = aa
     labels = bb
+    print("Labels test Unique in data_utils" , np.unique(labels))
     index = bbb
 
     return samples, labels, index
