@@ -15,6 +15,7 @@ from sklearn.utils.validation import *
 from sklearn.metrics._classification import *
 from sklearn.metrics._ranking import *
 from time import time
+from sklearn.metrics import auc
 
 begin = time()
 

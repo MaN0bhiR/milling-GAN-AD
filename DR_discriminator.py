@@ -6,6 +6,7 @@ import model
 import mmd
 from mod_core_rnn_cell_impl import LSTMCell
 from sklearn.metrics import precision_recall_fscore_support
+from sklearn.metrics import auc
 
 def anomaly_detection_plot(D_test, T_mb, L_mb, D_L, epoch, identifier):
 
@@ -62,12 +63,14 @@ def detection_Comb(Label_test, L_mb, I_mb, seq_step, tao):
     TP, TN, FP, FN = 0, 0, 0, 0
 
     for i in range(LL):
-        if D_L[i] > tao:
+        if 0 <= D_L[i] < tao/3:
             # true/negative
             D_L[i] = 0
+        elif tao/3<=D_L[i]<(2*tao)/3 :
+            D_L[i] = 1
         else:
             # false/positive
-            D_L[i] = 1
+            D_L[i] = 2
 
     cc = (D_L == L_L)
     # print('D_L:', D_L)
