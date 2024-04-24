@@ -59,18 +59,44 @@ def detection_Comb(Label_test, L_mb, I_mb, seq_step, tao):
 
     D_L /= Count
     #L_L /= Count
+    L_L[L_L==2] = 1
 
     TP, TN, FP, FN = 0, 0, 0, 0
 
     for i in range(LL):
-        if 0 <= D_L[i] < tao/3:
+        if D_L[i] > tao:
             # true/negative
-            D_L[i] = 0
-        elif tao/3<=D_L[i]<(2*tao)/3 :
             D_L[i] = 1
         else:
             # false/positive
-            D_L[i] = 2
+            D_L[i] = 0
+
+        A = D_L[i]
+        B = L_L[i]
+        if A == 1 and B == 1:
+            TP += 1
+        elif A == 1 and B == 0:
+            FP += 1
+        elif A == 0 and B == 0:
+            TN += 1
+        elif A == 0 and B == 1:
+            FN += 1
+    
+    Pre , Rec , F1 , FPR = 0 , 0 , 0 , 0
+
+    try:
+
+        Pre = (100 * TP) / (TP + FP)
+        # true positive among all the real positive
+        Rec = (100 * TP) / (TP + FN )
+        # The F1 score is the harmonic average of the precision and recall,
+        # where an F1 score reaches its best value at 1 (perfect precision and recall) and worst at 0.
+        F1 = (2 * Pre * Rec) / (100 * (Pre + Rec + 1))
+        # False positive rate--false alarm rate
+        FPR = (100 * FP) / (FP + TN+1)
+    
+    except :
+        pass
 
     cc = (D_L == L_L)
     # print('D_L:', D_L)
@@ -82,9 +108,9 @@ def detection_Comb(Label_test, L_mb, I_mb, seq_step, tao):
 
     Accu = float((N / LL) * 100)
 
-    precision, recall, f1, _ = precision_recall_fscore_support(L_L, D_L, average='binary')
+    #precision, recall, f1, _ = precision_recall_fscore_support(L_L, D_L, average='binary')
 
-    return Accu, precision, recall, f1,
+    return Accu, Pre, Rec, FPR
 
 
 def detection_logits_I(DL_test, L_mb, I_mb, seq_step, tao):
@@ -129,6 +155,10 @@ def detection_logits_I(DL_test, L_mb, I_mb, seq_step, tao):
             TN += 1
         elif A == 0 and B == 1:
             FN += 1
+    
+
+
+
 
 
     cc = (D_L == L_L)

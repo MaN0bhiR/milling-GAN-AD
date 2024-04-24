@@ -98,39 +98,45 @@ class myADclass():
         I_mb[start_pos:end_pos, :, :] = I_mmb
 
         results = np.zeros([18, 4])
+        Accu , Precision , Recall = [] , [] , []
         for i in range(2, 8):
             tao = 0.1 * i
             Accu2, Pre2, Rec2, F12 = DR_discriminator.detection_Comb(
                 DL_test, L_mb, I_mb, self.settings['seq_step'], tao)
-            print('seq_length:', self.settings['seq_length'])
-            print('Comb-logits-based-Epoch: {}; tao={:.1}; Accu: {:.4}; Pre: {:.4}; Rec: {:.4}; F1: {:.4}'
-                  .format(self.epoch, tao, Accu2, Pre2, Rec2, F12))
-            results[i - 2, :] = [Accu2, Pre2, Rec2, F12]
+            
+            if Pre2!=0 and Rec2!=0:
+                Accu.append(Accu2)
+                Precision.append(Pre2)
+                Recall.append(Rec2)
 
             Accu3, Pre3, Rec3, F13 = DR_discriminator.detection_Comb(
                 D_test, L_mb, I_mb, self.settings['seq_step'], tao)
-            print('seq_length:', self.settings['seq_length'])
-            print('Comb-statistic-based-Epoch: {}; tao={:.1}; Accu: {:.4}; Pre: {:.4}; Rec: {:.4}; F1: {:.4}'
-                  .format(self.epoch, tao, Accu3, Pre3, Rec3, F13))
-            results[i - 2+6, :] = [Accu3, Pre3, Rec3, F13]
 
-            Accu5, Pre5, Rec5, F15 = DR_discriminator.sample_detection(D_test, L_mb, tao)
-            print('seq_length:', self.settings['seq_length'])
-            print('sample-wise-Epoch: {}; tao={:.1}; Accu: {:.4}; Pre: {:.4}; Rec: {:.4}; F1: {:.4}'
-                  .format(self.epoch, tao, Accu5, Pre5, Rec5, F15))
-            results[i - 2+12, :] = [Accu5, Pre5, Rec5, F15]
+            if Pre3!=0 and Rec3!=0:
+                Accu.append(Accu3)
+                Precision.append(Pre3)
+                Recall.append(Rec3)
+            
 
-        return results
+            #Accu5, Pre5, Rec5, F15 = DR_discriminator.sample_detection(D_test, L_mb, tao)
+            
+
+        avg_acc = sum(Accu)/len(Accu)
+        avg_pre = sum(Precision)/len(Precision)
+        avg_rec = sum(Recall)/len(Recall)
+
+        return [avg_acc , avg_pre , avg_rec]
 
 if __name__ == "__main__":
     print('Main Starting...')
 
-    Results = np.empty([settings['num_epochs'], 18, 4])
+    #Results = np.empty([settings['num_epochs'], 18, 4])
 
     for epoch in range(settings['num_epochs']):
     # for epoch in range(50, 60):
         ob = myADclass(epoch)
-        Results[epoch, :, :] = ob.ADfunc()
+        Results = ob.ADfunc()
+        print(Results)
 
     # res_path = './experiments/plots/Results' + '_' + settings['sub_id'] + '_' + str(
     #     settings['seq_length']) + '.npy'
