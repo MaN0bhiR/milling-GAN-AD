@@ -54,11 +54,11 @@ def detection_Comb(Label_test, L_mb, I_mb, seq_step, tao):
         for j in range(0, bb):
             # print('index:', i*10+j)
             D_L[i*seq_step+j] += Label_test[i, j]
-            L_L[i * seq_step + j] += L_mb[i, j]
+            L_L[i * seq_step + j] = L_mb[i, j]
             Count[i * seq_step + j] += 1
 
     D_L /= Count
-    L_L /= Count
+    #L_L /= Count
 
     TP, TN, FP, FN = 0, 0, 0, 0
 
