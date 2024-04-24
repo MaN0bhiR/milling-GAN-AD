@@ -440,7 +440,7 @@ def sample_detection(D_test, L_mb, tao):
 
     D_test = D_test.reshape([aa, bb])
     L_mb = L_mb.reshape([aa, bb])
-    L = np.sum(L_mb, 1)
+    L = L_mb
     # NN = 0-10
     L[L > 0] = 1
 
@@ -449,10 +449,10 @@ def sample_detection(D_test, L_mb, tao):
     for i in range(aa):
         if np.mean(D_test[i, :]) > tao:
             # true/negative
-            D_L[i] = 0
+            D_L[i] = 1
         else:
             # false/positive
-            D_L[i] = 1
+            D_L[i] = 0
 
     cc = (D_L == L)
     # cc = list(cc)
